@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 
 class PerfisPage extends StatelessWidget {
@@ -7,19 +6,16 @@ class PerfisPage extends StatelessWidget {
   final List<Map<String, dynamic>> users = [
     {
       "name": "Pedro",
-      "rank": "1",
       "color1": Colors.blue,
       "color2": Colors.lightBlueAccent,
     },
     {
-      "name": "pedra",
-      "rank": "2",
+      "name": "Lucy",
       "color1": Colors.orange,
       "color2": Colors.amber,
     },
     {
       "name": "Alice",
-      "rank": "3",
       "color1": Colors.pink,
       "color2": Colors.redAccent,
     },
@@ -30,9 +26,9 @@ class PerfisPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.grey.shade100,
       appBar: AppBar(
-        backgroundColor: Colors.purple,
+        backgroundColor: const Color.fromARGB(255, 39, 87, 176),
         elevation: 0,
-        title: const Text("Designer"),
+        title: const Text("LockApp"),
       ),
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
@@ -64,9 +60,7 @@ class PerfisPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 35,
-                  backgroundImage: NetworkImage(
-                    "https://i.pravatar.cc/150?img=${index + 1}",
-                  ),
+                  backgroundImage:AssetImage("asset/images/pedro.png"),
                 ),
 
                 const SizedBox(width: 20),
@@ -80,7 +74,7 @@ class PerfisPage extends StatelessWidget {
                         user["name"],
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -88,39 +82,11 @@ class PerfisPage extends StatelessWidget {
                       const SizedBox(height: 5),
 
                       const SizedBox(height: 20),
-
-                      Row(
-                        mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
-                        children: const [
-                          InfoItem("2342", "Popularity"),
-                          InfoItem("4736", "Like"),
-                          InfoItem("136", "Followed"),
-                        ],
-                      ),
                     ],
                   ),
                 ),
 
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      user["rank"],
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 35,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      "Ranking",
-                      style: TextStyle(
-                        color: Colors.white70,
-                      ),
-                    ),
-                  ],
-                ),
+              
               ],
             ),
           );
