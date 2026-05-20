@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lock_app/screens/controle_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -24,7 +25,7 @@ class MenuPage extends StatelessWidget {
           size: 35,
         ),
       ),
-      drawer: Drawer(),
+      
       body: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(
@@ -37,11 +38,12 @@ class MenuPage extends StatelessWidget {
               child: SizedBox(
                 height: 50,
                 child: Text(
-                  "Olá,tutor",
+                  "Olá,",
                   
-                  ))),// Adicionar o nome do usuário no lugar do tutor
-              
-              
+                  ),
+                  ),
+                  ),// Adicionar o nome do usuário no lugar do tutor
+            
             
               
               
@@ -139,15 +141,47 @@ class MenuPage extends StatelessWidget {
     bottomNavigationBar: BottomAppBar(
     shape: CircularNotchedRectangle(), // Recorte para o botão flutuante, se houver
     color: Colors.blue,
-    child: Container(
+    child: SizedBox(
       height: 50,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          IconButton(icon: Icon(Icons.menu), onPressed: () {}),
-          IconButton(icon: Icon(Icons.person), onPressed: () {}),
-          IconButton(icon: Icon(Icons.feed_outlined), onPressed: () {}),
-          IconButton(icon: Icon(Icons.settings), onPressed: () {}),
+          IconButton(icon: Icon(Icons.home), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => MenuPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => MenuPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.feed_outlined), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => MenuPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.settings), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => MenuPage(),
+                      ),
+                    );
+          }),
+
         ],
       ),
     ),
