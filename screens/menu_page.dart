@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lock_app/screens/controle_page.dart';
+import 'package:lock_app/screens/perfis_page.dart';
+import 'package:lock_app/screens/travar_page.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
@@ -159,7 +161,7 @@ class MenuPage extends StatelessWidget {
             Navigator.push(
                     context, 
                     MaterialPageRoute(
-                      builder: (context) => MenuPage(),
+                      builder: (context) => PerfisPage(),
                       ),
                     );
           }),
@@ -168,7 +170,7 @@ class MenuPage extends StatelessWidget {
             Navigator.push(
                     context, 
                     MaterialPageRoute(
-                      builder: (context) => MenuPage(),
+                      builder: (context) => TravarPage(),
                       ),
                     );
           }),
@@ -177,7 +179,7 @@ class MenuPage extends StatelessWidget {
             Navigator.push(
                     context, 
                     MaterialPageRoute(
-                      builder: (context) => MenuPage(),
+                      builder: (context) => ControlePage(),
                       ),
                     );
           }),
