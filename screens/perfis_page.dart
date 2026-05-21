@@ -8,16 +8,19 @@ class PerfisPage extends StatelessWidget {
       "name": "Pedro",
       "color1": Colors.blue,
       "color2": Colors.lightBlueAccent,
+      "image": "asset/images/pedro.png",
     },
     {
       "name": "Lucy",
       "color1": Colors.orange,
       "color2": Colors.amber,
+      "image": "asset/images/Lucy.jpg"
     },
     {
       "name": "Alice",
       "color1": Colors.pink,
       "color2": Colors.redAccent,
+      "image" : "asset/images/Alice.png"
     },
   ];
 
@@ -60,9 +63,10 @@ class PerfisPage extends StatelessWidget {
               children: [
                 CircleAvatar(
                   radius: 35,
-                  backgroundImage:AssetImage("asset/images/pedro.png"),
+                  backgroundImage: AssetImage(
+                    user["image"],
                 ),
-
+                ),
                 const SizedBox(width: 20),
 
                 Expanded(
@@ -86,7 +90,22 @@ class PerfisPage extends StatelessWidget {
                   ),
                 ),
 
+              Container(
+            decoration: BoxDecoration(
               
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(15),
+              ),
+
+              child: IconButton(
+                onPressed: () {},
+
+                icon: const Icon(
+                  Icons.edit,
+                  color: Colors.white,
+                ),
+              ),
+            )
               ],
             ),
           );
@@ -95,6 +114,7 @@ class PerfisPage extends StatelessWidget {
     );
   }
 }
+
 
 class InfoItem extends StatelessWidget {
   final String number;
@@ -124,3 +144,4 @@ class InfoItem extends StatelessWidget {
     );
   }
 }
+
