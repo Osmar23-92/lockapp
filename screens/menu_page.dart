@@ -41,16 +41,25 @@ class MenuPage extends StatelessWidget {
             vertical: 15,
           ),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+
+            mainAxisSize: MainAxisSize.min,
+
             children: [
-            Expanded(
-              child: SizedBox(
-                height: 50,
-                child: Text(
-                  "Olá, $nomeExibicao!",
-                  
-                  ),
+
+            SizedBox(
+              
+              width: double.infinity,
+              child: Text(
+                textAlign: TextAlign.left,
+                style: TextStyle(
+                  fontSize: 30,
+                  color: Color.fromARGB(255, 4, 54, 79),
                 ),
-              ),// Adicionar o nome do usuário no lugar do tutor
+                "Olá, $nomeExibicao!",
+                
+                ),
+            ),
             
             
               

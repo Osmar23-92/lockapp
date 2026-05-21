@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:lock_app/screens/controle_page.dart';
+import 'package:lock_app/screens/menu_page.dart';
+import 'package:lock_app/screens/travar_page.dart';
 
 class PerfisPage extends StatelessWidget {
   PerfisPage({super.key});
@@ -27,12 +30,8 @@ class PerfisPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 39, 87, 176),
-        elevation: 0,
-        title: const Text("LockApp"),
-      ),
+      backgroundColor: Colors.white,
+      
       body: ListView.builder(
         padding: const EdgeInsets.all(16),
         itemCount: users.length,
@@ -111,6 +110,55 @@ class PerfisPage extends StatelessWidget {
           );
         },
       ),
+    bottomNavigationBar: BottomAppBar(
+    shape: CircularNotchedRectangle(), // Recorte para o botão flutuante, se houver
+    color: Colors.blue,
+    child: SizedBox(
+      height: 50,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          IconButton(icon: Icon(Icons.home), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => MenuPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.person), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => PerfisPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.feed_outlined), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => TravarPage(),
+                      ),
+                    );
+          }),
+
+          IconButton(icon: Icon(Icons.settings), onPressed: () {
+            Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => ControlePage(),
+                      ),
+                    );
+          }),
+
+        ],
+      ),
+    ),
+      ),
+
     );
   }
 }
