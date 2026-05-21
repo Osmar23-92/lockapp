@@ -13,7 +13,7 @@ class CadastroPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       
-      backgroundColor: const Color.fromARGB(255, 144, 220, 254),
+      backgroundColor: Colors.white,
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
@@ -24,7 +24,7 @@ class CadastroPage extends StatelessWidget {
           children: [
         
         Image.asset(
-          "asset/images/logo.jpeg",
+          "asset/images/logo.png",
                   width: 120,
                   ),
         
@@ -39,22 +39,46 @@ class CadastroPage extends StatelessWidget {
         TextField(
           controller: _nomeCadastroController,
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.person),
+            prefixIconColor: Color.fromARGB(255, 41, 131, 181),
            labelText: "Nome:",
-            border: OutlineInputBorder()),
+           labelStyle: TextStyle(
+            color: Color.fromARGB(255, 4, 54, 79),
+           ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+             ),
+            ),
           ),
         
         TextField(
           controller: _emailCadastroController,
          decoration: InputDecoration(
+          prefixIcon: Icon(Icons.email),
+          prefixIconColor: Color.fromARGB(255, 41, 131, 181),
            labelText: "E-mail:",
-            border: OutlineInputBorder()), 
+           labelStyle: TextStyle(
+            color: Color.fromARGB(255, 4, 54, 79),
+           ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+             ),
+            ), 
         ),
         
         TextField(
           controller: _senhaCadastroController,
           decoration: InputDecoration(
+            prefixIcon: Icon(Icons.password),
+            prefixIconColor: Color.fromARGB(255, 41, 131, 181),
            labelText: "Crie uma senha:",
-            border: OutlineInputBorder()),
+           labelStyle: TextStyle(
+            color: Color.fromARGB(255, 4, 54, 79),
+           ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(15),
+             ),
+            ),
         ),
         
         Row(
@@ -76,6 +100,7 @@ class CadastroPage extends StatelessWidget {
                           ),
                         ),
                         onPressed: (){
+                          UserData.nomeUsuario = _nomeCadastroController.text;
                           UserData.emailCadastrado = _emailCadastroController.text;
                           UserData.senhaCadastrada = _senhaCadastroController.text;
                         ScaffoldMessenger.of(context). showSnackBar( 
@@ -94,6 +119,7 @@ class CadastroPage extends StatelessWidget {
                           "Cadastrar",
                           style: TextStyle(
                             color: const Color.fromARGB(255, 4, 54, 79),
+                            fontSize: 25,
                           ),),
                       ),
                     ),
@@ -131,6 +157,7 @@ class CadastroPage extends StatelessWidget {
                           "Limpar",
                           style: TextStyle(
                             color: const Color.fromARGB(255, 4, 54, 79),
+                            fontSize: 25,
                           ),),
                       ),
                     ),
