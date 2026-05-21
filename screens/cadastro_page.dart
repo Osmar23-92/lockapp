@@ -14,10 +14,11 @@ class CadastroPage extends StatelessWidget {
     return Scaffold(
       
       backgroundColor: Colors.white,
-      body: Padding(
+      body: SingleChildScrollView(
+        child: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 20,
-          vertical: 15,
+          vertical: 50,
         ),
         child: Column(
           spacing: 30,
@@ -81,49 +82,10 @@ class CadastroPage extends StatelessWidget {
             ),
         ),
         
-        Row(
+            Row(
                 spacing: 7,
                 children: [
-                  Expanded(
-                    child: SizedBox(
-                      height: 50,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          textStyle: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                          
-                          backgroundColor: const Color.fromARGB(255, 41, 131, 181),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                        ),
-                        onPressed: (){
-                          UserData.nomeUsuario = _nomeCadastroController.text;
-                          UserData.emailCadastrado = _emailCadastroController.text;
-                          UserData.senhaCadastrada = _senhaCadastroController.text;
-                        ScaffoldMessenger.of(context). showSnackBar( 
-                          const SnackBar(
-                            content: Text("Cadastro realizado com sucesso!"),
-                            ),
-                          );
-                          Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context) => LoginPage(),
-                      ),
-                    );
-                        }, 
-                        child: Text(
-                          "Cadastrar",
-                          style: TextStyle(
-                            color: const Color.fromARGB(255, 4, 54, 79),
-                            fontSize: 25,
-                          ),),
-                      ),
-                    ),
-                  ),
+                  
                   
                   Expanded(
                     child: SizedBox(
@@ -162,6 +124,70 @@ class CadastroPage extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  Expanded(
+                    child: SizedBox(
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          
+                          backgroundColor: const Color.fromARGB(255, 41, 131, 181),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                        ),
+                        onPressed: (){
+
+                          final emailDigitado = _emailCadastroController.text.trim();
+                          final senhaDigitada = _senhaCadastroController.text.trim();
+                          final nomeDigitado = _nomeCadastroController.text.trim();
+                    
+                    if (
+                     nomeDigitado.isEmpty ||  emailDigitado.isEmpty || senhaDigitada.isEmpty) {
+                       ScaffoldMessenger.of(context).showSnackBar(
+                         SnackBar(
+                          content: Text(
+                            "Por favor, preencha todos os campos!",
+                            ),
+                          backgroundColor: Colors.red,
+                        ),
+                      );
+                      return;
+                     }
+                     
+                    UserData.nomeUsuario = nomeDigitado;
+                    UserData.emailCadastrado = emailDigitado;
+                    UserData.senhaCadastrada = senhaDigitada;
+
+                    ScaffoldMessenger.of(context).showSnackBar( 
+                      const SnackBar (
+                        content: Text("Cadastro realizado com sucesso!"),
+                        backgroundColor: Colors.green,
+                      ),
+                    );
+
+                          Navigator.push(
+                    context, 
+                    MaterialPageRoute(
+                      builder: (context) => LoginPage(),
+                      ),
+                    );
+                        }, 
+                        child: Text(
+                          "Cadastrar",
+                          style: TextStyle(
+                            color: const Color.fromARGB(255, 4, 54, 79),
+                            fontSize: 25,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+
                 ],
               )
         
@@ -169,6 +195,7 @@ class CadastroPage extends StatelessWidget {
         
           
         ),
+      ),
       ),
     );
   }

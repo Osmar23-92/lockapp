@@ -100,14 +100,15 @@ class LoginPage extends StatelessWidget {
                   onPressed: () {
                     final emailDigitado = _emailController.text.trim();
                     final senhaDigitada = _senhaController.text.trim();
-
-                   
+                    
                     if (
                       emailDigitado.isEmpty || senhaDigitada.isEmpty) {
                       ScaffoldMessenger.of(context).showSnackBar(
                          SnackBar(
-                          content: Text("Por favor, preencha todos os campos!"),
-                          backgroundColor: Colors.orange,
+                          content: Text(
+                            "Por favor, preencha todos os campos!",
+                            ),
+                          backgroundColor: Colors.red,
                         ),
                       );
                       return; 
@@ -118,7 +119,8 @@ class LoginPage extends StatelessWidget {
                         emailDigitado == UserData.emailCadastrado &&
                         senhaDigitada == UserData.senhaCadastrada &&
                         UserData.emailCadastrado != false &&
-                        UserData.emailCadastrado!.isNotEmpty) {
+                        UserData.emailCadastrado!.isNotEmpty) 
+                        {
                       
                       Navigator.push(
                         context,
@@ -126,11 +128,15 @@ class LoginPage extends StatelessWidget {
                           builder: (context) =>  MenuPage(),
                         ),
                       );
-                    } else {
+                    } 
+                    else 
+                    {
                       
                       ScaffoldMessenger.of(context).showSnackBar(
                          SnackBar(
-                          content: Text("Usuário não cadastrado ou dados incorretos!"),
+                          content: Text(
+                            "Usuário não cadastrado ou dados incorretos!",
+                            ),
                           backgroundColor: Colors.red,
                         ),
                       );
@@ -138,7 +144,9 @@ class LoginPage extends StatelessWidget {
                   },
                   child:  Text(
                     "Entrar",
-                    style: TextStyle(fontSize: 25),
+                    style: TextStyle(
+                      fontSize: 25,
+                      ),
                   ),
                 ),
               ),
@@ -148,7 +156,9 @@ class LoginPage extends StatelessWidget {
                 children: [
                    Text(
                     "Não tem conta?",
-                    style: TextStyle(fontSize: 15),
+                    style: TextStyle(
+                      fontSize: 15,
+                      ),
                   ),
                   TextButton(
                     onPressed: () {

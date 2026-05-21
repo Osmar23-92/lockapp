@@ -2,12 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:lock_app/screens/controle_page.dart';
 import 'package:lock_app/screens/perfis_page.dart';
 import 'package:lock_app/screens/travar_page.dart';
+import 'package:lock_app/services/user_data.dart';
 
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
+
+    final String nomeExibicao = (UserData.nomeUsuario != null && UserData.nomeUsuario!.isNotEmpty)
+    ? UserData.nomeUsuario!
+    : "tutor" ;
+
     return Scaffold(
       appBar: AppBar(
         title: Center(
@@ -15,7 +21,7 @@ class MenuPage extends StatelessWidget {
             
             style: TextStyle(
               color: const Color.fromARGB(255, 41, 131, 181),
-              fontSize: 30,
+              fontSize: 30, 
               fontWeight: FontWeight.bold,
             ),
             "LockApp",
@@ -40,11 +46,11 @@ class MenuPage extends StatelessWidget {
               child: SizedBox(
                 height: 50,
                 child: Text(
-                  "Olá,",
+                  "Olá, $nomeExibicao!",
                   
                   ),
-                  ),
-                  ),// Adicionar o nome do usuário no lugar do tutor
+                ),
+              ),// Adicionar o nome do usuário no lugar do tutor
             
             
               
@@ -68,8 +74,8 @@ class MenuPage extends StatelessWidget {
                        child: Text(
                         "Controle sensorial",
                         ),
-                        ),
-                        ),
+                      ),
+                    ),
                 ),
                 SizedBox(
                   height: 50,
@@ -87,7 +93,7 @@ class MenuPage extends StatelessWidget {
                        child: Text(
                         "Modo guiado",
                         ),
-                        ),
+                      ),
                   ),
                 ),
               ],
@@ -112,7 +118,7 @@ class MenuPage extends StatelessWidget {
                        child: Text(
                         "Apps restritos",
                         ),
-                        ),
+                      ),
                   ),
                 ),
                 SizedBox(
@@ -131,7 +137,7 @@ class MenuPage extends StatelessWidget {
                        child: Text(
                         "Sincronização",
                         ),
-                        ),
+                      ),
                   ),
                 ),
               ],
