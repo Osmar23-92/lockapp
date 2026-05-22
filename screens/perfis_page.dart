@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lock_app/screens/controle_page.dart';
-import 'package:lock_app/screens/menu_page.dart';
-import 'package:lock_app/screens/travar_page.dart';
+
 
 class PerfisPage extends StatelessWidget {
   PerfisPage({super.key});
@@ -32,86 +30,16 @@ class PerfisPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
 
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: Color.fromARGB(255, 4, 54, 79),
-        selectedItemColor: Colors.white,
-        unselectedItemColor: Color.fromARGB(255, 41, 131, 181),
-        iconSize: 30,
-
-        type: BottomNavigationBarType.fixed,
-        items: [
-
-          BottomNavigationBarItem(
-            
-           icon: IconButton(
-            onPressed: (){
-              Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context) => MenuPage(),
-                      ),
-                    );
-            }, 
-            icon: Icon(Icons.home),
-            ),
-            label: "home",
-          ),
-
-          BottomNavigationBarItem(
-
-            icon: IconButton(onPressed: (){
-              Navigator.push(
-                    context, 
-                    MaterialPageRoute(
-                      builder: (context) => PerfisPage(),
-                      ),
-                    );
-            }, 
-            icon: Icon(Icons.person),
-            ),
-            label: "Perfis"
-          ),
-
-          BottomNavigationBarItem(
-            
-            icon: IconButton(onPressed: (){
-              Navigator.push(
-                context, MaterialPageRoute(
-                  builder: (context) => TravarPage(),
-                  ),
-                );
-            }, 
-            icon: Icon(Icons.feed_outlined),
-            ),
-            label: "Apps"
-          ),
-          
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: (){
-              Navigator.push(
-                context, MaterialPageRoute(
-                  builder: (context) => ControlePage(),
-                  ),
-                );
-            }, 
-            icon: Icon(Icons.settings),
-            ),
-            label: "Comntroles"
-          ),
-
-        ],
-        ),
       
       body: ListView.builder(
-        padding: const EdgeInsets.all(16),
+        padding:  EdgeInsets.all(16),
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
 
           return Container(
-            margin: const EdgeInsets.only(bottom: 20),
-            padding: const EdgeInsets.all(20),
+            margin:  EdgeInsets.only(bottom: 20),
+            padding:  EdgeInsets.all(20),
             height: 160,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
@@ -137,7 +65,7 @@ class PerfisPage extends StatelessWidget {
                     user["image"],
                 ),
                 ),
-                const SizedBox(width: 20),
+                 SizedBox(width: 20),
 
                 Expanded(
                   child: Column(
@@ -146,16 +74,16 @@ class PerfisPage extends StatelessWidget {
                     children: [
                       Text(
                         user["name"],
-                        style: const TextStyle(
+                        style:  TextStyle(
                           color: Colors.white,
                           fontSize: 25,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
 
-                      const SizedBox(height: 5),
+                       SizedBox(height: 5),
 
-                      const SizedBox(height: 20),
+                       SizedBox(height: 20),
                     ],
                   ),
                 ),
@@ -170,7 +98,7 @@ class PerfisPage extends StatelessWidget {
               child: IconButton(
                 onPressed: () {},
 
-                icon: const Icon(
+                icon:  Icon(
                   Icons.edit,
                   color: Colors.white,
                 ),
@@ -192,7 +120,7 @@ class InfoItem extends StatelessWidget {
   final String number;
   final String label;
 
-  const InfoItem(this.number, this.label, {super.key});
+   InfoItem(this.number, this.label, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -200,14 +128,14 @@ class InfoItem extends StatelessWidget {
       children: [
         Text(
           number,
-          style: const TextStyle(
+          style:  TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
         ),
         Text(
           label,
-          style: const TextStyle(
+          style:  TextStyle(
             color: Colors.white70,
             fontSize: 12,
           ),

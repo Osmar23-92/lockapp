@@ -16,7 +16,7 @@ class CadastroPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SingleChildScrollView(
         child: Padding(
-        padding: const EdgeInsets.symmetric(
+        padding:  EdgeInsets.symmetric(
           horizontal: 20,
           vertical: 50,
         ),
@@ -97,7 +97,7 @@ class CadastroPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           
-                          backgroundColor: const Color.fromARGB(255, 41, 131, 181),
+                          backgroundColor:  Color.fromARGB(255, 41, 131, 181),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -108,7 +108,7 @@ class CadastroPage extends StatelessWidget {
                           _senhaCadastroController.clear();
 
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                             SnackBar(
                               content: Text("Campos limpos!"),
                               duration: Duration(milliseconds: 500),
                               ),
@@ -118,8 +118,8 @@ class CadastroPage extends StatelessWidget {
                         child: Text(
                           "Limpar",
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 4, 54, 79),
-                            fontSize: 25,
+                            color:  Color.fromARGB(255, 4, 54, 79),
+                            fontSize: 20,
                           ),),
                       ),
                     ),
@@ -135,7 +135,7 @@ class CadastroPage extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                           
-                          backgroundColor: const Color.fromARGB(255, 41, 131, 181),
+                          backgroundColor:  Color.fromARGB(255, 41, 131, 181),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(5),
                           ),
@@ -164,7 +164,7 @@ class CadastroPage extends StatelessWidget {
                     UserData.senhaCadastrada = senhaDigitada;
 
                     ScaffoldMessenger.of(context).showSnackBar( 
-                      const SnackBar (
+                       SnackBar (
                         content: Text("Cadastro realizado com sucesso!"),
                         backgroundColor: Colors.green,
                       ),
@@ -180,8 +180,8 @@ class CadastroPage extends StatelessWidget {
                         child: Text(
                           "Cadastrar",
                           style: TextStyle(
-                            color: const Color.fromARGB(255, 4, 54, 79),
-                            fontSize: 25,
+                            color:  Color.fromARGB(255, 4, 54, 79),
+                            fontSize: 20,
                           ),
                         ),
                       ),

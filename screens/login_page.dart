@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lock_app/screens/cadastro_page.dart';
 import 'package:lock_app/screens/menu_page.dart';
+import 'package:lock_app/screens/navigation_page.dart';
 import 'package:lock_app/services/user_data.dart';
 
 class LoginPage extends StatelessWidget {
@@ -119,13 +120,13 @@ class LoginPage extends StatelessWidget {
                         emailDigitado == UserData.emailCadastrado &&
                         senhaDigitada == UserData.senhaCadastrada &&
                         UserData.emailCadastrado != false &&
-                        UserData.emailCadastrado!.isNotEmpty) 
+                        UserData.emailCadastrado.isNotEmpty) 
                         {
                       
-                      Navigator.push(
+                      Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
-                          builder: (context) =>  MenuPage(),
+                          builder: (context) =>  NavigationPage(),
                         ),
                       );
                     } 
