@@ -1,4 +1,4 @@
-import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:screen_brightness/screen_brightness.dart';
@@ -21,8 +21,9 @@ class _ControlePageState extends State<ControlePage> {
   double _currentVolume = 0.0;
   double _currentBrightness = 0.5;
   bool _isLocked = false;
+  double _lockedVolume = 0.0;
   
-  StreamSubscription<double>? _volumeSubscription;
+  
 
   @override
   void initState() {
@@ -42,6 +43,13 @@ class _ControlePageState extends State<ControlePage> {
 
     _volumeController.addListener((volume) {
       if (mounted) {
+        if (_isLocked) {
+          _volumeController.setVolume(_lockedVolume);
+        }
+        setState(() {
+          _currentVolume = volume;
+        });
+      } else {
         setState(() {
           _currentVolume = volume;
         });
@@ -147,7 +155,8 @@ class _ControlePageState extends State<ControlePage> {
                             backgroundColor: Colors.green),
                           ); 
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Senha incorreta!"),
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                              content: Text("Senha incorreta!"),
                             backgroundColor: Colors.red,
                             ),
                           );
@@ -170,7 +179,9 @@ class _ControlePageState extends State<ControlePage> {
 
   @override
   void dispose() {
-    _volumeSubscription?.cancel();
+    _volumeController.removeListener();
+    _senhaConfimaController.dispose();
+
     super.dispose();
   }
 
@@ -315,6 +326,7 @@ class _ControlePageState extends State<ControlePage> {
                       } else {
                         setState(() {
                           _isLocked = true;
+                          _lockedVolume = _currentVolume;
                         },
                       );
                         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
