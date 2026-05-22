@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:lock_app/services/user_data.dart';
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+   MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +20,8 @@ class MenuPage extends StatelessWidget {
           children: [
 
             SizedBox(
+              
+              width: double.infinity,
               child: Text(
                 textAlign: TextAlign.left,
                 style:  TextStyle(
@@ -33,7 +35,7 @@ class MenuPage extends StatelessWidget {
             
            
 
-
+            
           ],
         ),
       ),
