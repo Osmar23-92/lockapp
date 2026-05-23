@@ -45,19 +45,22 @@ class _ControlePageState extends State<ControlePage> {
 
     _volumeController.addListener((volume) {
       if (mounted) {
-        if (_isLocked) {
+      if (_isLocked) {
           _volumeController.setVolume(_lockedVolume);
           setState(() {
             _currentVolume = _lockedVolume;
           });
-        } else {
+          } else {
           setState(() {
             _currentVolume = volume;
           });
-        }
-      }
-    }, fetchInitialVolume: false);
-  }
+         }
+       }
+       }, 
+       
+       fetchInitialVolume: false);
+
+     }
 
   void _initBrightness() async {
     try {
@@ -66,37 +69,41 @@ class _ControlePageState extends State<ControlePage> {
         setState(() {
           _currentBrightness = brightness;
           if (_isLocked) {
-            _lockedBrightness = brightness;
+           _lockedBrightness = brightness;
           }
-        });
+         },
+        );
       }
 
       ScreenBrightness.instance.onApplicationScreenBrightnessChanged.listen((brightness) {
-        if (mounted) {
+          if (mounted) {
           if (_isLocked) {
             ScreenBrightness.instance.setApplicationScreenBrightness(_lockedBrightness);
             setState(() {
               _currentBrightness = _lockedBrightness;
-            });
-          } else {
+              },
+             );
+            } else {
             setState(() {
               _currentBrightness = brightness;
             });
-          }
-        }
-      });
-    } catch (e) {
+           }
+         }
+       },
+      );
+      } catch (e) {
       debugPrint("Erro ao obter brilho: $e");
-    }
-  }
+      }
+     }
 
-  // AGORA SENDO CHAMADA CORRETAMENTE NO CLIQUE DO BOTÃO
+  
   void _alternarTravaGeral() async {
     setState(() {
       _isLocked = true;
       _lockedVolume = _currentVolume;
       _lockedBrightness = _currentBrightness;
-    });
+       },
+      );
 
     await AppPreferences.setVolumeLocked(true);
     await AppPreferences.setLockedVolumeValue(_lockedVolume);
@@ -109,16 +116,17 @@ class _ControlePageState extends State<ControlePage> {
          SnackBar(
           content: Text("Controles bloqueados!"),
           backgroundColor: Colors.amber,
-        ),
-      );
-    }
-  }
+          ),
+        );
+       }
+     }
 
-  // AGORA SENDO CHAMADA CORRETAMENTE APÓS A CONFIRMAÇÃO DA SENHA
+  
   void _desativarTravaGeral() async {
     setState(() {
       _isLocked = false;
-    });
+      },
+     );
 
     await AppPreferences.setVolumeLocked(false);
 
@@ -127,10 +135,10 @@ class _ControlePageState extends State<ControlePage> {
          SnackBar(
           content: Text("Controles liberados!"),
           backgroundColor: Colors.green,
-        ),
-      );
+         ),
+       );
+     }
     }
-  }
 
   void _updateVolume(double value) {
     if (_isLocked) return;
@@ -191,20 +199,23 @@ class _ControlePageState extends State<ControlePage> {
               onPressed: () => Navigator.pop(context),
               child:  Text(
                 "Cancelar",
-                style: TextStyle(color: Colors.red),
+                style: TextStyle(
+                  color: Colors.red,
+                  ),
+                ),
               ),
-            ),
             ElevatedButton(
-              style: ElevatedButton.styleFrom(
+                style: ElevatedButton.styleFrom(
                 backgroundColor:  Color.fromARGB(255, 41, 131, 181),
               ),
+
               onPressed: () {
                 final senhaDigitada = _senhaConfimaController.text.trim();
 
                 if (senhaDigitada == UserData.senhaCadastrada) {
                   Navigator.pop(context);
                   _desativarTravaGeral(); // Chamando a função estruturada aqui
-                } else {
+                  } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                      SnackBar(
                       content: Text("Senha incorreta!"),
@@ -213,8 +224,8 @@ class _ControlePageState extends State<ControlePage> {
                   );
                 }
               },
-              child:  Text(
-                "Confirmar",
+                child:  Text(
+                  "Confirmar",
                 style: TextStyle(
                   color: Colors.white, // Alterado para contraste legível
                 ),
@@ -238,15 +249,18 @@ class _ControlePageState extends State<ControlePage> {
     return Center(
       child: SingleChildScrollView(
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+          padding:  EdgeInsets.symmetric(
+            horizontal: 20, 
+            vertical: 15),
           child: Column(
             spacing: 20,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (_isLocked)
                  Padding(
-                  padding: EdgeInsets.only(bottom: 20),
-                  child: Row(
+                  padding: EdgeInsets.only(
+                    bottom: 20),
+                    child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(

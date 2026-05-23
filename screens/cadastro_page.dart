@@ -187,16 +187,12 @@ class CadastroPage extends StatelessWidget {
                       ),
                     ),
                   ),
-
                 ],
-              )
-        
-          ],
-        
-          
-        ),
-      ),
-      ),
-    );
-  }
-}
+              ),
+             ],
+            ),
+          ),
+         ),
+       );
+      }
+     }
