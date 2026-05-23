@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:lock_app/screens/cadastro_page.dart';
-import 'package:lock_app/screens/menu_page.dart';
 import 'package:lock_app/screens/navigation_page.dart';
 import 'package:lock_app/services/user_data.dart';
 
@@ -25,7 +24,7 @@ class LoginPage extends StatelessWidget {
            
             spacing: 20, 
             children: [
-               SizedBox(height: 20), 
+               
               
               Image.asset(
                 "asset/images/logo.png",
@@ -153,7 +152,7 @@ class LoginPage extends StatelessWidget {
               ),
 
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                    Text(
                     "Não tem conta?",
@@ -180,6 +179,8 @@ class LoginPage extends StatelessWidget {
                   ),
                 ],
               ),
+            
+             
             ],
           ),
         ),
