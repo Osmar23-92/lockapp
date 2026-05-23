@@ -20,4 +20,15 @@ class AppPreferences {
   static Future<void> setLockedVolumeValue(double value) async {
     await _prefs.setDouble('lockedVolumeValue', value);
   }
+
+  static const String _keyBlockedApps = 'blocked_package_names';
+
+  static List<String> get blockedApps {
+    return _prefs.getStringList(_keyBlockedApps) ?? [];
+  }
+
+  static Future<void> setBlockedApps(List<String> apps) async {
+    await _prefs.setStringList(_keyBlockedApps, apps);
+  }
+
 }
