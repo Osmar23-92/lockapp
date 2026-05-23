@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:lock_app/services/user_data.dart';
 
 class MenuPage extends StatelessWidget {
-   MenuPage({super.key});
+  const MenuPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final String nomeExibicao = (UserData.nomeUsuario != null && UserData.nomeUsuario.isNotEmpty)
+    final String nomeExibicao = (
+      UserData.nomeUsuario.isNotEmpty)
         ? UserData.nomeUsuario
         : "tutor";
 
