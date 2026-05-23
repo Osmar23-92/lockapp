@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:lock_app/services/app_preferences.dart';
 import 'package:volume_controller/volume_controller.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:lock_app/services/user_data.dart';
@@ -22,41 +23,54 @@ class _ControlePageState extends State<ControlePage> {
   double _currentBrightness = 0.5;
   bool _isLocked = false;
   double _lockedVolume = 0.0;
-  
-  
+  bool _isVolumeLocked = false;
+
 
   @override
   void initState() {
     super.initState();
+    _isVolumeLocked = AppPreferences.isVolumeLocked;
+
+    if (_isVolumeLocked) {
+      _lockedVolume = AppPreferences.lockedVolumeValue;
+    }
+
     _initVolume();
     _initBrightness();
+
+  }
+  
+
+ Future<void> _initVolume() async {
+  
+  double initialVolume = await VolumeController.instance.getVolume();
+  
+  if (mounted) {
+    setState(() {
+      _currentVolume = initialVolume;
+     },
+    );
   }
 
-  void _initVolume() {
-    _volumeController.getVolume().then((volume) {
-      if (mounted) {
+  
+  VolumeController.instance.addListener((volume) {
+    if (mounted) {
+      if (_isLocked || _isVolumeLocked) {
+        
+        VolumeController.instance.setVolume(_lockedVolume);
+          setState(() {
+          _currentVolume = _lockedVolume;
+           },
+         );
+        } else {
+         
         setState(() {
           _currentVolume = volume;
         });
       }
-    });
-
-    _volumeController.addListener((volume) {
-      if (mounted) {
-        if (_isLocked) {
-          _volumeController.setVolume(_lockedVolume);
-        }
-        setState(() {
-          _currentVolume = volume;
-        });
-      } else {
-        setState(() {
-          _currentVolume = volume;
-        });
-      }
-    });
-  }
-
+    }
+  }, fetchInitialVolume: false); 
+}
   
   void _initBrightness() async {
     try {
@@ -73,7 +87,7 @@ class _ControlePageState extends State<ControlePage> {
   }
 
   void _updateVolume(double value) {
-    if (_isLocked) return;
+    if (_isLocked || _isVolumeLocked) return;
     _volumeController.setVolume(value);
     if (mounted) {
       setState(() {
@@ -246,6 +260,8 @@ class _ControlePageState extends State<ControlePage> {
                           ),
                         ],
                       ),
+
+
                       Slider(
                         value: _currentVolume,
                         min: 0.0,
@@ -255,6 +271,26 @@ class _ControlePageState extends State<ControlePage> {
                         onChanged:  _isLocked ? null : _updateVolume,
                       ),
                       Text("${(_currentVolume * 100).toStringAsFixed(0)}%"),
+
+                      Divider(),
+
+                      SwitchListTile(
+                        title: Text("Fixar este volume"),
+                        subtitle: Text("Mantém o nivel ao sair do app"),
+                        value: _isVolumeLocked,
+                        tileColor: Colors.blue, 
+                        onChanged: _isLocked  ? null : (bool value) async{
+                          setState(() {
+                          _isVolumeLocked = value;
+                          if (value) {
+                            _lockedVolume = _currentVolume;
+                          }
+                          });
+                          await AppPreferences.setVolumeLocked(value);
+                          await AppPreferences.setLockedVolumeValue(_currentVolume);
+                        },
+                      ),
+
                     ],
                   ),
                 ),
