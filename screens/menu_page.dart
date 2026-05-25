@@ -20,16 +20,32 @@ class MenuPage extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
 
-            SizedBox(
-              
-              width: double.infinity,
-              child: Text(
-                textAlign: TextAlign.left,
-                style:  TextStyle(
-                  fontSize: 30,
-                  color: Color.fromARGB(255, 41, 131, 181),
+            Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(20),
+                  bottomRight: Radius.circular(20),
                 ),
-                "Olá, $nomeExibicao!",
+                gradient: LinearGradient(
+                  transform: GradientRotation(90),
+                  colors: [
+                    Colors.black,
+                    Colors.blueAccent,
+                    Colors.amberAccent,
+                  ],
+                ),
+              ),
+              child: SizedBox(
+                
+                width: double.infinity,
+                child: Text(
+                  textAlign: TextAlign.left,
+                  style:  TextStyle(
+                    fontSize: 30,
+                    color: Color.fromARGB(255, 41, 131, 181),
+                  ),
+                  "Olá, $nomeExibicao!",
+                ),
               ),
             ),  
           ],
