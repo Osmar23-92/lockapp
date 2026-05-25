@@ -4,6 +4,8 @@ import 'package:lock_app/services/user_data.dart';
 class MenuPage extends StatelessWidget {
   const MenuPage({super.key});
 
+    
+
   @override
   Widget build(BuildContext context) {
     final String nomeExibicao = (
@@ -14,38 +16,46 @@ class MenuPage extends StatelessWidget {
     
     return Center(
       child: Padding(
-        padding:  EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+        padding:  EdgeInsets.symmetric(
+          horizontal: 20, 
+          vertical: 15),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
 
             Container(
+              alignment: Alignment.topLeft,
+              height: 100,
+              width: 300,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  bottomLeft: Radius.circular(20),
-                  bottomRight: Radius.circular(20),
-                ),
+                borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
-                  transform: GradientRotation(90),
+                  transform: GradientRotation(45),
                   colors: [
+                    Color.fromARGB(255, 4, 54, 79),
                     Colors.black,
-                    Colors.blueAccent,
-                    Colors.amberAccent,
-                  ],
-                ),
-              ),
-              child: SizedBox(
-                
-                width: double.infinity,
-                child: Text(
-                  textAlign: TextAlign.left,
-                  style:  TextStyle(
-                    fontSize: 30,
-                    color: Color.fromARGB(255, 41, 131, 181),
+                    Color.fromARGB(255, 4, 54, 79),
+                    Colors.black,
+                  ]
                   ),
-                  "Olá, $nomeExibicao!",
-                ),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    "Olá!, $nomeExibicao ",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 41, 131, 181),
+                      fontWeight: FontWeight.bold,
+                      fontSize: 35, 
+                     ),
+                    ),
+                    SizedBox(width: 40,),
+                   CircleAvatar(
+                    radius: 35,
+                    backgroundImage: AssetImage(UserData.caminhoFoto),
+                   ),
+                ],
               ),
             ),  
           ],
