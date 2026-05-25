@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 
 
@@ -25,8 +27,10 @@ class PerfisPage extends StatelessWidget {
     },
   ];
 
+  
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: Colors.white,
 
@@ -120,7 +124,7 @@ class InfoItem extends StatelessWidget {
   final String number;
   final String label;
 
-   InfoItem(this.number, this.label, {super.key});
+  const InfoItem(this.number, this.label, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -144,4 +148,8 @@ class InfoItem extends StatelessWidget {
     );
   }
 }
+
+
+
+
 
