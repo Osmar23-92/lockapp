@@ -170,10 +170,13 @@ class CadastroPage extends StatelessWidget {
                       ),
                     );
 
-                          Navigator.push(
+                          Navigator.pushReplacement(
                     context, 
                     MaterialPageRoute(
-                      builder: (context) => LoginPage(),
+                      builder: (context) => LoginPage(
+                        emailCadastrado: emailDigitado,
+                        senhaCadastrada: senhaDigitada,
+                       ),
                       ),
                     );
                         }, 

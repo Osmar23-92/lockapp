@@ -4,6 +4,7 @@ import 'package:lock_app/screens/menu_page.dart';
 import 'package:lock_app/screens/perfis_page.dart';
 import 'package:lock_app/screens/travar_page.dart';
 import 'package:lock_app/screens/controle_page.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class NavigationPage extends StatefulWidget {
    const NavigationPage({super.key});
@@ -21,6 +22,12 @@ class _NavigationPageState extends State<NavigationPage> {
      TravarPage(),
      ControlePage(),
   ];
+
+  Future<void> verificarPermissoesDoTutor() async {
+    if (!await Permission.systemAlertWindow.isGranted) {
+    await Permission.systemAlertWindow.request();
+   }
+  }
 
   @override
   Widget build(BuildContext context) {

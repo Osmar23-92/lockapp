@@ -27,9 +27,9 @@ class MenuPage extends StatelessWidget {
           children: [
 
             Container(
-              alignment: Alignment.topLeft,
+              alignment: Alignment.centerLeft,
               height: 100,
-              width: 300,
+              width: 350,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
                 gradient: LinearGradient(
@@ -43,6 +43,7 @@ class MenuPage extends StatelessWidget {
                   ),
               ),
               child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
                     "Olá!, $nomeExibicao ",
@@ -52,12 +53,20 @@ class MenuPage extends StatelessWidget {
                       fontSize: 35, 
                      ),
                     ),
-                    SizedBox(width: 40,),
-                   CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.grey,
-                    child: Icon(Icons.security,
-                    color: Colors.white,),
+                    
+                   Padding(
+                     padding: const EdgeInsets.symmetric(
+                      horizontal: 15,
+                      
+                     ),
+                     child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: const Color.fromARGB(0, 158, 158, 158),
+                      child: Icon(Icons.shield_outlined,
+                      color: Color.fromARGB(255, 41, 131, 181),
+                      size: 60,),
+                      
+                     ),
                    ),
                 ],
               ),

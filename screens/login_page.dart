@@ -2,12 +2,47 @@ import 'package:flutter/material.dart';
 import 'package:lock_app/screens/cadastro_page.dart';
 import 'package:lock_app/screens/navigation_page.dart';
 import 'package:lock_app/services/user_data.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({super.key});
+class LoginPage extends StatefulWidget {
+ 
+  final String? emailCadastrado;
+  final String? senhaCadastrada;
 
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _senhaController = TextEditingController();
+  const LoginPage({
+    super.key,
+    this.emailCadastrado,
+    this.senhaCadastrada,
+  });
+
+  @override
+  State<LoginPage> createState() => _LoginPageState();
+}
+
+
+class _LoginPageState extends State<LoginPage> {
+  late final TextEditingController _emailController;
+  late final TextEditingController _senhaController;
+
+  @override
+  void initState() {
+    super.initState();
+    _emailController = TextEditingController(text: widget.emailCadastrado ?? '');
+    _senhaController = TextEditingController(text: widget.senhaCadastrada ?? '');
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    super.dispose();
+  }
+
+   Future<void> verificarPermissoesDoTutor() async {
+     if (!await Permission.systemAlertWindow.isGranted) {
+       await Permission.systemAlertWindow.request();
+      }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +132,7 @@ class LoginPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(15), 
                     ),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     final emailDigitado = _emailController.text.trim();
                     final senhaDigitada = _senhaController.text.trim();
                     
@@ -115,13 +150,16 @@ class LoginPage extends StatelessWidget {
                     }
 
                     
-                    if (
-                        emailDigitado == UserData.emailCadastrado &&
+                    if (emailDigitado == UserData.emailCadastrado &&
                         senhaDigitada == UserData.senhaCadastrada &&
-                        UserData.emailCadastrado != false &&
-                        UserData.emailCadastrado.isNotEmpty) 
-                        {
-                      
+                        UserData.emailCadastrado.isNotEmpty) {
+                       try {
+                       await verificarPermissoesDoTutor(); 
+                       } catch (e) {
+                        print("Erro ao solicitar permissão: $e");
+                       }
+                       if (!mounted) return;
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
@@ -129,6 +167,7 @@ class LoginPage extends StatelessWidget {
                         ),
                       );
                     } 
+                    
                     else 
                     {
                       
@@ -140,6 +179,7 @@ class LoginPage extends StatelessWidget {
                           backgroundColor: Colors.red,
                         ),
                       );
+                    
                     }
                   },
                   child:  Text(
@@ -187,4 +227,5 @@ class LoginPage extends StatelessWidget {
       ),
     );
   }
+  
 }
