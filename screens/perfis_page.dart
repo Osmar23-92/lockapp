@@ -33,18 +33,36 @@ class PerfisPage extends StatelessWidget {
     
     return Scaffold(
       backgroundColor: Colors.white,
-
+    appBar: AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: Colors.white,
+      iconTheme: IconThemeData(
+        color: Colors.black,
+        size: 35,
+      ),
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(onPressed: () {
+            
+          }, 
+          icon: Icon(Icons.add),
+          ),
+        ],
+      ),
+    ),
       
       body: ListView.builder(
         padding:  EdgeInsets.all(16),
         itemCount: users.length,
         itemBuilder: (context, index) {
           final user = users[index];
+          
 
           return Container(
             margin:  EdgeInsets.only(bottom: 20),
             padding:  EdgeInsets.all(20),
-            height: 160,
+            height: 105,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
               gradient: LinearGradient(
@@ -107,11 +125,30 @@ class PerfisPage extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-            )
+            ),
+              SizedBox(width: 10,),
+            Container(
+            decoration: BoxDecoration(
+              
+                color: Colors.white24,
+                borderRadius: BorderRadius.circular(15),
+              ),
+
+              child: IconButton(
+                onPressed: () {},
+
+                icon:  Icon(
+                  Icons.delete,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+             
               ],
             ),
           );
         },
+        
       ),
     
 
