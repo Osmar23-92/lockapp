@@ -1,77 +1,91 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:lock_app/screens/editar_page.dart';
 
+class PerfisPage extends StatefulWidget {
+  const PerfisPage({super.key});
 
-class PerfisPage extends StatelessWidget {
-  PerfisPage({super.key});
+  @override
+  State<PerfisPage> createState() => _PerfisPageState();
+}
 
-  final List<Map<String, dynamic>> users = [
+class _PerfisPageState extends State<PerfisPage> {
+
+  List<Map<String, dynamic>> users = [
     {
       "name": "Pedro",
       "color1": Colors.blue,
       "color2": Colors.lightBlueAccent,
-      "image": "asset/images/pedro.png",
+      "image": "assets/images/pedro.png",
     },
     {
       "name": "Lucy",
       "color1": Colors.orange,
       "color2": Colors.amber,
-      "image": "asset/images/Lucy.jpg"
+      "image": "assets/images/Lucy.jpg",
     },
     {
       "name": "Alice",
       "color1": Colors.pink,
       "color2": Colors.redAccent,
-      "image" : "asset/images/Alice.png"
+      "image": "assets/images/Alice.png",
     },
   ];
 
-  
+  void deletarPerfil(int index) {
+    setState(() {
+      users.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    
+
     return Scaffold(
       backgroundColor: Colors.white,
-    appBar: AppBar(
-      automaticallyImplyLeading: false,
-      backgroundColor: Colors.white,
-      iconTheme: IconThemeData(
-        color: Colors.black,
-        size: 35,
+
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(
+          color: Colors.black,
+          size: 35,
+        ),
+
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.add),
+            ),
+          ],
+        ),
       ),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          IconButton(onPressed: () {
-            
-          }, 
-          icon: Icon(Icons.add),
-          ),
-        ],
-      ),
-    ),
-      
+
       body: ListView.builder(
-        padding:  EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16),
         itemCount: users.length,
+
         itemBuilder: (context, index) {
+
           final user = users[index];
-          
 
           return Container(
-            margin:  EdgeInsets.only(bottom: 20),
-            padding:  EdgeInsets.all(20),
+            margin: const EdgeInsets.only(bottom: 20),
+            padding: const EdgeInsets.all(20),
             height: 105,
+
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
+
               gradient: LinearGradient(
                 colors: [
                   user["color1"],
                   user["color2"],
                 ],
               ),
-              boxShadow: [
+
+              boxShadow: const [
                 BoxShadow(
                   color: Colors.black12,
                   blurRadius: 10,
@@ -79,114 +93,119 @@ class PerfisPage extends StatelessWidget {
                 ),
               ],
             ),
+
             child: Row(
               children: [
+
                 CircleAvatar(
                   radius: 35,
                   backgroundImage: AssetImage(
                     user["image"],
-                ),
-                ),
-                 SizedBox(width: 20),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        user["name"],
-                        style:  TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-
-                       SizedBox(height: 5),
-
-                       SizedBox(height: 20),
-                    ],
                   ),
                 ),
 
-              Container(
-            decoration: BoxDecoration(
-              
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(15),
-              ),
+                const SizedBox(width: 20),
 
-              child: IconButton(
-                onPressed: () {},
-
-                icon:  Icon(
-                  Icons.edit,
-                  color: Colors.white,
+                Expanded(
+                  child: Text(
+                    user["name"],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 25,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
-              ),
-            ),
-              SizedBox(width: 10,),
-            Container(
-            decoration: BoxDecoration(
-              
-                color: Colors.white24,
-                borderRadius: BorderRadius.circular(15),
-              ),
 
-              child: IconButton(
-                onPressed: () {},
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
 
-                icon:  Icon(
-                  Icons.delete,
-                  color: Colors.white,
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.push(
+                     context,
+                     MaterialPageRoute(
+                     builder: (context) => EditarPage(),
+                     ),
+                    );
+                    },
+
+                    icon: const Icon(
+                      Icons.edit,
+                      color: Colors.white,
+                    ),
+                  ),
                 ),
-              ),
+
+                const SizedBox(width: 10),
+
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+
+                  child: IconButton(
+                    onPressed: () async {
+
+    bool? confirmar = await showDialog(
+      context: context,
+
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Excluir perfil"),
+          content: Text(
+            "Tem certeza que deseja excluir este perfil?",
+          ),
+
+          actions: [
+
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+
+              child: Text("Cancelar"),
             ),
-             
+
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+
+              child: Text("Excluir"),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmar == true) {
+      deletarPerfil(index);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Perfil excluído com sucesso"),
+        ),
+      );
+    }
+  },
+
+
+                    icon: const Icon(
+                      Icons.delete,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
         },
-        
       ),
-    
-
     );
   }
 }
-
-
-class InfoItem extends StatelessWidget {
-  final String number;
-  final String label;
-
-  const InfoItem(this.number, this.label, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Text(
-          number,
-          style:  TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Text(
-          label,
-          style:  TextStyle(
-            color: Colors.white70,
-            fontSize: 12,
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-
-
-
-
