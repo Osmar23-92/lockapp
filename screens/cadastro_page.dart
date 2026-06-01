@@ -106,7 +106,7 @@ class CadastroPage extends StatelessWidget {
                           _nomeCadastroController.clear();
                           _emailCadastroController.clear();
                           _senhaCadastroController.clear();
-
+                          
                           ScaffoldMessenger.of(context).showSnackBar(
                              SnackBar(
                               content: Text("Campos limpos!"),

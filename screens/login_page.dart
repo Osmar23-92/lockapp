@@ -156,11 +156,13 @@ class _LoginPageState extends State<LoginPage> {
                        try {
                        await verificarPermissoesDoTutor(); 
                        } catch (e) {
+                        // ignore: avoid_print
                         print("Erro ao solicitar permissão: $e");
                        }
                        if (!mounted) return;
 
                       Navigator.pushReplacement(
+                        // ignore: use_build_context_synchronously
                         context,
                         MaterialPageRoute(
                           builder: (context) =>  NavigationPage(),

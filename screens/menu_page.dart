@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:lock_app/services/user_data.dart';
 
@@ -11,8 +10,6 @@ class MenuPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String nomeExibicao = (UserData.nomeUsuario.isNotEmpty) ? UserData.nomeUsuario : "tutor";
-    
-
     final String nomeSecundario =  UserData.nomePerfilSecundario;
     final String fotoSecundario =  UserData.fotoPerfilSecundario;
 
@@ -36,9 +33,7 @@ class MenuPage extends StatelessWidget {
                   transform: GradientRotation(45),
                   colors: [
                     Color.fromARGB(255, 4, 54, 79),
-                    Colors.black,
-                    Color.fromARGB(255, 4, 54, 79),
-                    Colors.black,
+                    Color.fromARGB(255, 2, 24, 36),
                    ]
                   ),
               ),
@@ -46,7 +41,7 @@ class MenuPage extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Olá!, $nomeExibicao ",
+                    "   Olá! $nomeExibicao ",
                     style: TextStyle(
                       color: Color.fromARGB(255, 41, 131, 181),
                       fontWeight: FontWeight.bold,
@@ -59,6 +54,7 @@ class MenuPage extends StatelessWidget {
                       horizontal: 15,
                       
                      ),
+
                      child: CircleAvatar(
                       radius: 30,
                       backgroundColor: const Color.fromARGB(0, 158, 158, 158),
@@ -76,14 +72,63 @@ class MenuPage extends StatelessWidget {
 
             Text(
               "Perfil sob monitoramento",
-              style: TextStyle(
-                color: Colors.grey,
-               fontSize: 14,
-               fontWeight: FontWeight.bold),
               ),
 
-              SizedBox(width: 20,),
+            const SizedBox(height: 10),
 
+            SizedBox(
+              height: 90,
+              child: ListView.builder(
+                scrollDirection:Axis.horizontal,
+                itemCount: UserData.perfis.length,
+                
+                itemBuilder: (context, index) {
+
+                  final perfil = UserData.perfis[index];
+
+                  print("nome: ${perfil["name"]}");
+                  print("imagem: ${perfil["image"]}");
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
+                    
+                    child: Column(
+                      children: [
+
+                        CircleAvatar(
+                          radius: 25,
+
+                          backgroundImage:  perfil["image"] != null &&
+                            perfil["image"].toString().isNotEmpty
+                            ? FileImage(File(perfil["image"]))
+                            : null,
+
+                          child:
+                            perfil["image"] == null ||
+                            perfil["image"].toString().isEmpty
+                            ? const Icon(Icons.person)
+                            : null,
+                      ),
+
+                  const SizedBox(height: 5),
+                  
+                  SizedBox(
+                    width: 60,
+
+                    child: Text(
+                      perfil["name"],
+                      textAlign: TextAlign.center,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            
               nomeSecundario.isNotEmpty
               ? Card(
                 elevation: 2,
@@ -103,7 +148,7 @@ class MenuPage extends StatelessWidget {
                     : null,
                     child: fotoSecundario.isEmpty
                     ? Icon(Icons.person,
-                    color: Colors.white,)
+                    color: const Color.fromARGB(255, 255, 255, 255),)
                     : null,
                   ),
                   title: Text(
@@ -123,22 +168,22 @@ class MenuPage extends StatelessWidget {
                 : Container(
                  width: double.infinity,
                  padding: EdgeInsets.all(20),
-                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                 decoration: BoxDecoration( 
+                   color:  Color.fromARGB(255, 4, 54, 79),
                   borderRadius: BorderRadius.circular(15),
                   border: Border.all(
-                    color: Colors.grey
+                  color: Color.fromARGB(255, 4, 54, 79),
                   ),
                  ), 
                  child: Column(
                   children: [
                     Icon(Icons.person_search,
                     size: 40,
-                    color: Colors.grey,),
+                    color: const Color.fromARGB(255, 41, 131, 181),),
                     Text("Nenhum perfil selecionado.\n Vá para perfis para ativar um",
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.grey,
+                      color: const Color.fromARGB(255, 41, 131, 181),
                       fontSize: 15,
                        ),
                      ),
