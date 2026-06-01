@@ -1,5 +1,6 @@
+import 'package:flutter/foundation.dart'; // Importante para usar o 'kIsWeb'
 import 'package:flutter/material.dart';
-import 'dart:io';
+import 'dart:io'; // Mantido para o Android, mas não será chamado na Web
 import 'package:lock_app/services/user_data.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -11,22 +12,21 @@ class PerfisPage extends StatefulWidget {
 }
 
 class _PerfisPageState extends State<PerfisPage> {
+  List<Map<String, dynamic>> users = [];
 
- @override
+  @override
   void initState() {
     super.initState();
-
+    // Carrega os dados da sua classe de serviço
     users = UserData.perfis.map((perfil) {
       return {
-        "name":perfil["name"],
-        "image":File(perfil["image"]),
-        "color1": Colors.purple,
-        "color2": Colors.deepPurpleAccent,
+        "name": perfil["name"],
+        "image": perfil["image"], // Salva o caminho como String pura (funciona em ambos)
+        "color1": perfil["color1"] ?? Colors.purple,
+        "color2": perfil["color2"] ?? Colors.deepPurpleAccent,
       };
     }).toList();
   }
-
-  List<Map<String, dynamic>> users = [];
 
   void deletarPerfil(int index) {
     setState(() {
@@ -35,434 +35,299 @@ class _PerfisPageState extends State<PerfisPage> {
     });
   }
 
-  ImageProvider getImagem(dynamic imagem) {
-  if (imagem is File) {
-    return FileImage(imagem);
+  // Essa função agora retorna um widget de imagem dinâmico baseado na plataforma
+  Widget exibirImagem(String caminho, {double radius = 35}) {
+    if (caminho.startsWith('assets/')) {
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: AssetImage(caminho),
+      );
+    }
+
+    if (kIsWeb) {
+      // No Chrome, o caminho gerado pelo image_picker é uma URL Blob válida
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: NetworkImage(caminho),
+      );
+    } else {
+      // No Android, usamos o arquivo local
+      return CircleAvatar(
+        radius: radius,
+        backgroundImage: FileImage(File(caminho)),
+      );
+    }
   }
-  return AssetImage(imagem);
-}
 
-  File? imagemSelecionada;
-
-    Future<void> escolherImagem() async {
-      final picker = ImagePicker();
-
-      final XFile? imagem = await picker.pickImage(
-        source: ImageSource.gallery,
-     );
-
-      if (imagem != null) {
-        setState(() {
-         imagemSelecionada = File(imagem.path);
-       });
-     }
-    } 
-
-       void adicionarPerfil(String nome, File imagem) {
+  void adicionarPerfil(String nome, String caminhoImagem) {
     setState(() {
-    users.add({
-      "name": nome,
-      "image": imagem,
-      "color1": Colors.purple,
-      "color2": Colors.deepPurpleAccent,
-    });
+      users.add({
+        "name": nome,
+        "image": caminhoImagem,
+        "color1": Colors.purple,
+        "color2": Colors.deepPurpleAccent,
+      });
 
       UserData.perfis.add({
-      "name": nome,
-      "image": imagem.path,
+        "name": nome,
+        "image": caminhoImagem,
+      });
     });
-  });
-}
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Colors.white,
-
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(
-          color: Colors.black,
-          size: 35,
-        ),
-
+        iconTheme: const IconThemeData(color: Colors.black, size: 35),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
             IconButton(
-              onPressed: () {
-                 TextEditingController nomeController =
-      TextEditingController();
-
-  File? foto;
-
-  showDialog(
-    context: context,
-    builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setDialogState) {
-          return AlertDialog(
-            title: const Text("Novo Perfil"),
-
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-                GestureDetector(
-                  onTap: () async {
-                    final picker = ImagePicker();
-
-                    final XFile? imagem =
-                        await picker.pickImage(
-                      source: ImageSource.gallery,
-                    );
-
-                    if (imagem != null) {
-                      setDialogState(() {
-                        foto = File(imagem.path);
-                      });
-                    }
-                  },
-
-                  child: CircleAvatar(
-                    radius: 40,
-                    backgroundColor: Colors.blue,
-
-                    backgroundImage: foto != null
-                            ? FileImage(foto!)
-                            : null,
-                            
-                    child: foto == null
-                        ? const Icon(Icons.add_a_photo)
-                        : null,
-                  ),
-                ),
-
-                const SizedBox(height: 15),
-
-                TextField(
-                  controller: nomeController,
-                  decoration: const InputDecoration(
-                    labelText: "Nome",
-                  ),
-                ),
-              ],
-            ),
-
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text("Cancelar"),
-              ),
-
-              ElevatedButton(
-                onPressed: () {
-                  if (nomeController.text.isNotEmpty &&
-                      foto != null) {
-
-                    adicionarPerfil(
-                      nomeController.text,
-                      foto!,
-                    );
-
-                    Navigator.pop(context);
-                  }
-                },
-                child: const Text("Salvar"),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
-},
-
-
-              
               icon: const Icon(Icons.add),
+              onPressed: () {
+                TextEditingController nomeController = TextEditingController();
+                String? caminhoFoto; // Armazena a string do caminho temporário
+
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return StatefulBuilder(
+                      builder: (context, setDialogState) {
+                        return AlertDialog(
+                          title: const Text("Novo Perfil"),
+                          content: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  final picker = ImagePicker();
+                                  final XFile? imagem = await picker.pickImage(
+                                    source: ImageSource.gallery,
+                                  );
+
+                                  if (imagem != null) {
+                                    setDialogState(() {
+                                      // imagem.path funciona perfeitamente no Chrome e no Android
+                                      caminhoFoto = imagem.path;
+                                    });
+                                  }
+                                },
+                                child: caminhoFoto != null
+                                    ? exibirImagem(caminhoFoto!, radius: 40)
+                                    : const CircleAvatar(
+                                        radius: 40,
+                                        backgroundColor: Colors.blue,
+                                        child: Icon(Icons.add_a_photo, color: Colors.white),
+                                      ),
+                              ),
+                              const SizedBox(height: 15),
+                              TextField(
+                                controller: nomeController,
+                                decoration: const InputDecoration(labelText: "Nome"),
+                              ),
+                            ],
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () => Navigator.pop(context),
+                              child: const Text("Cancelar"),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                if (nomeController.text.isNotEmpty && caminhoFoto != null) {
+                                  adicionarPerfil(nomeController.text, caminhoFoto!);
+                                  Navigator.pop(context);
+                                }
+                              },
+                              child: const Text("Salvar"),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
+                );
+              },
             ),
           ],
         ),
       ),
-
       body: ListView.builder(
-        physics: BouncingScrollPhysics(),
+        physics: const BouncingScrollPhysics(),
         padding: const EdgeInsets.all(16),
         itemCount: users.length,
-
         itemBuilder: (context, index) {
-
           final user = users[index];
 
           return Container(
             margin: const EdgeInsets.only(bottom: 20),
             padding: const EdgeInsets.all(20),
             height: 105,
-
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(25),
-
-              gradient: LinearGradient(
-                colors: [
-                  user["color1"],
-                  user["color2"],
-                ],
-              ),
-
+              gradient: LinearGradient(colors: [user["color1"], user["color2"]]),
               boxShadow: const [
-                BoxShadow(
-                  color: Colors.black12,
-                  blurRadius: 10,
-                  offset: Offset(0, 5),
-                ),
+                BoxShadow(color: Colors.black12, blurRadius: 10, offset: Offset(0, 5)),
               ],
             ),
-
             child: Row(
               children: [
-
-               CircleAvatar(
-               radius: 35,
-               backgroundImage: getImagem(user["image"]),
-            ),
-            
+                exibirImagem(user["image"]), // Substituído aqui
                 const SizedBox(width: 20),
-
                 Expanded(
                   child: Text(
                     user["name"],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: const TextStyle(color: Colors.white, fontSize: 25, fontWeight: FontWeight.bold),
                   ),
                 ),
-
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white24,
                     borderRadius: BorderRadius.circular(15),
                   ),
-
                   child: IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.white),
                     onPressed: () {
-                    TextEditingController nomeController =
-      TextEditingController(text: user["name"]);
+                      TextEditingController nomeController = TextEditingController(text: user["name"]);
+                      Color cor1 = user["color1"];
+                      Color cor2 = user["color2"];
+                      String caminhoFotoAtual = user["image"];
 
-  Color cor1 = user["color1"];
-  Color cor2 = user["color2"];
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return StatefulBuilder(
+                            builder: (context, setDialogState) {
+                              return AlertDialog(
+                                title: const Text("Editar Perfil"),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    exibirImagem(caminhoFotoAtual, radius: 40),
+                                    TextButton.icon(
+                                      onPressed: () async {
+                                        final picker = ImagePicker();
+                                        final XFile? imagem = await picker.pickImage(
+                                          source: ImageSource.gallery,
+                                        );
 
-  showDialog(
-    context: context,
-    builder: (context) {
-      return StatefulBuilder(
-        builder: (context, setDialogState) {
-          return AlertDialog(
-            title: const Text("Editar Perfil"),
+                                        if (imagem != null) {
+                                          setDialogState(() {
+                                            caminhoFotoAtual = imagem.path;
+                                          });
+                                        }
+                                      },
+                                      icon: const Icon(Icons.image),
+                                      label: const Text("Mudar imagem"),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    TextField(
+                                      controller: nomeController,
+                                      decoration: const InputDecoration(labelText: "Nome"),
+                                    ),
+                                    const SizedBox(height: 15),
+                                    Row(
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        GestureDetector(
+                                          onTap: () => setDialogState(() {
+                                            cor1 = Colors.blue;
+                                            cor2 = Colors.lightBlueAccent;
+                                          }),
+                                          child: const CircleAvatar(backgroundColor: Colors.blue),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => setDialogState(() {
+                                            cor1 = Colors.red;
+                                            cor2 = Colors.orange;
+                                          }),
+                                          child: const CircleAvatar(backgroundColor: Colors.red),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => setDialogState(() {
+                                            cor1 = Colors.green;
+                                            cor2 = Colors.lightGreen;
+                                          }),
+                                          child: const CircleAvatar(backgroundColor: Colors.green),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: const Text("Cancelar"),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        users[index]["name"] = nomeController.text;
+                                        users[index]["image"] = caminhoFotoAtual;
+                                        users[index]["color1"] = cor1;
+                                        users[index]["color2"] = cor2;
 
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-
-                CircleAvatar(
-                 radius: 40,
-                 backgroundImage: getImagem(user["image"]),
-              ),
-
-                TextButton.icon(
-                  onPressed: () async {
-                    final picker = ImagePicker();
-
-                    final XFile? imagem = await picker.pickImage(source: ImageSource.gallery
-                    );
-
-                    if (imagem != null){
-                      setState(() {
-                        users[index]["image"] = File(imagem.path);
-
-                        UserData.perfis[index]["image"] =
-                        imagem.path;
-                      });
-
-                      setDialogState(() {});
-                    }
-                  },
-
-                  icon: const Icon(Icons.image),
-                  label: const Text("Mudar imagem"),
-                ),
-
-                const SizedBox(height: 10),
-
-                TextField(
-                  controller: nomeController,
-                  decoration: const InputDecoration(
-                    labelText: "Nome",
+                                        UserData.perfis[index]["name"] = nomeController.text;
+                                        UserData.perfis[index]["image"] = caminhoFotoAtual;
+                                      });
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text("Salvar"),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
+                const SizedBox(width: 10),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white24,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.white),
+                    onPressed: () async {
+                      bool? confirmar = await showDialog<bool>(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text("Excluir perfil"),
+                            content: const Text("Tem certeza que deseja excluir este perfil?"),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, false),
+                                child: const Text("Cancelar"),
+                              ),
+                              TextButton(
+                                onPressed: () => Navigator.pop(context, true),
+                                child: const Text("Excluir"),
+                              ),
+                            ],
+                          );
+                        },
+                      );
 
-                const SizedBox(height: 15),
-
-                Row(
-                  mainAxisAlignment:
-                      MainAxisAlignment.spaceEvenly,
-
-                  children: [
-
-                    GestureDetector(
-                      onTap: () {
-                        setDialogState(() {
-                          cor1 = Colors.blue;
-                          cor2 = Colors.lightBlueAccent;
-                        });
-                      },
-
-                      child: CircleAvatar(
-                        backgroundColor: Colors.blue,
-                      ),
-                    ),
-
-                    GestureDetector(
-                      onTap: () {
-                        setDialogState(() {
-                          cor1 = Colors.red;
-                          cor2 = Colors.orange;
-                        });
-                      },
-
-                      child: CircleAvatar(
-                        backgroundColor: Colors.red,
-                      ),
-                    ),
-
-                    GestureDetector(
-                      onTap: () {
-                        setDialogState(() {
-                          cor1 = Colors.green;
-                          cor2 = Colors.lightGreen;
-                        });
-                      },
-
-                      child: CircleAvatar(
-                        backgroundColor: Colors.green,
-                      ),
-                    ),
-                  ],
+                      if (confirmar == true) {
+                        deletarPerfil(index);
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text("Perfil excluído com sucesso")),
+                          );
+                        }
+                      }
+                    },
+                  ),
                 ),
               ],
-            ),
-
-            actions: [
-
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-
-                child: const Text("Cancelar"),
-              ),
-
-              ElevatedButton(
-                onPressed: () {
-
-                  setState(() {
-                    users[index]["name"] =
-                        nomeController.text;
-
-                    UserData.perfis[index]["name"] =
-                        nomeController.text;
-
-                    users[index]["color1"] = cor1;
-                    users[index]["color2"] = cor2;
-                  });
-
-                  Navigator.pop(context);
-                },
-
-                child: const Text("Salvar"),
-              ),
-            ],
-          );
-        },
-      );
-    },
-  );
-                    },
-
-                    icon: const Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-
-                const SizedBox(width: 10),
-
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white24,
-                    borderRadius: BorderRadius.circular(15),
-                  ),
-
-                  child: IconButton(
-                    onPressed: () async {
-
-    bool? confirmar = await showDialog(
-      context: context,
-
-      builder: (context) {
-        return AlertDialog(
-          title: Text("Excluir perfil"),
-          content: Text(
-            "Tem certeza que deseja excluir este perfil?",
-          ),
-
-          actions: [
-
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, false);
-              },
-
-              child: Text("Cancelar"),
-            ),
-
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context, true);
-              },
-
-              child: Text("Excluir"),
-            ),
-          ],
-        );
-      },
-    );
-
-    if (confirmar == true) {
-      deletarPerfil(index);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Perfil excluído com sucesso"),
-        ),
-      );
-    }
-  },
-
-
-                    icon: const Icon(
-                      Icons.delete,
-                      color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
             ),
           );
         },
