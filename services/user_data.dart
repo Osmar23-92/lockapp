@@ -9,8 +9,7 @@ class UserData {
   static String caminhoFoto = "";
   static String nomePerfilSecundario = "";
   static String fotoPerfilSecundario = "";
-
-  
+  static List<Map<String, dynamic>> perfis = [];
 }
 
 
