@@ -1,8 +1,9 @@
-import 'package:flutter/foundation.dart'; // Importante para usar o 'kIsWeb'
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'dart:io'; // Mantido para o Android, mas não será chamado na Web
+import 'dart:io';
 import 'package:lock_app/services/user_data.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter/services.dart'; // IMPORTANTE: Mantido para o MethodChannel funcionar
 
 class PerfisPage extends StatefulWidget {
   const PerfisPage({super.key});
@@ -21,11 +22,26 @@ class _PerfisPageState extends State<PerfisPage> {
     users = UserData.perfis.map((perfil) {
       return {
         "name": perfil["name"],
-        "image": perfil["image"], // Salva o caminho como String pura (funciona em ambos)
+        "image": perfil["image"], 
         "color1": perfil["color1"] ?? Colors.purple,
         "color2": perfil["color2"] ?? Colors.deepPurpleAccent,
       };
     }).toList();
+
+    // Dispara a permissão correta assim que o app abre
+    verificarEAtivarAcessoUso();
+  }
+
+  // SOLUÇÃO NATIVA: Abre direto a tela de Dados de Uso do Android sem depender de pacotes instáveis
+  void verificarEAtivarAcessoUso() async {
+    if (kIsWeb) return; // Proteção essencial para não quebrar o Chrome
+
+    try {
+      const platform = MethodChannel('com.exemplo.lock_app/permissao');
+      await platform.invokeMethod('abrirConfiguracaoUso');
+    } catch (e) {
+      debugPrint("Erro ao abrir configurações nativas: $e");
+    }
   }
 
   void deletarPerfil(int index) {
@@ -35,7 +51,7 @@ class _PerfisPageState extends State<PerfisPage> {
     });
   }
 
-  // Essa função agora retorna um widget de imagem dinâmico baseado na plataforma
+  // Retorna a imagem correspondente dependendo da plataforma (Web ou Android)
   Widget exibirImagem(String caminho, {double radius = 35}) {
     if (caminho.startsWith('assets/')) {
       return CircleAvatar(
@@ -45,13 +61,11 @@ class _PerfisPageState extends State<PerfisPage> {
     }
 
     if (kIsWeb) {
-      // No Chrome, o caminho gerado pelo image_picker é uma URL Blob válida
       return CircleAvatar(
         radius: radius,
         backgroundImage: NetworkImage(caminho),
       );
     } else {
-      // No Android, usamos o arquivo local
       return CircleAvatar(
         radius: radius,
         backgroundImage: FileImage(File(caminho)),
@@ -90,7 +104,7 @@ class _PerfisPageState extends State<PerfisPage> {
               icon: const Icon(Icons.add),
               onPressed: () {
                 TextEditingController nomeController = TextEditingController();
-                String? caminhoFoto; // Armazena a string do caminho temporário
+                String? caminhoFoto;
 
                 showDialog(
                   context: context,
@@ -111,7 +125,6 @@ class _PerfisPageState extends State<PerfisPage> {
 
                                   if (imagem != null) {
                                     setDialogState(() {
-                                      // imagem.path funciona perfeitamente no Chrome e no Android
                                       caminhoFoto = imagem.path;
                                     });
                                   }
@@ -176,7 +189,7 @@ class _PerfisPageState extends State<PerfisPage> {
             ),
             child: Row(
               children: [
-                exibirImagem(user["image"]), // Substituído aqui
+                exibirImagem(user["image"]),
                 const SizedBox(width: 20),
                 Expanded(
                   child: Text(
